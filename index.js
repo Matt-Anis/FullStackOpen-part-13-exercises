@@ -39,7 +39,7 @@ Note.init(
   },
 );
 
-app.use(express.json);
+app.use(express.json());
 
 app.get("/api/notes", async (req, res) => {
   const notes = await Note.findAll();
@@ -47,9 +47,16 @@ app.get("/api/notes", async (req, res) => {
 });
 
 app.post("/api/notes", async (req, res) => {
-  console.log(req.body);
-  const note = await Note.create({ ...req.body, date: new Date() });
-  res.json(note);
+  try {
+    const note = await Note.create({ ...req.body, date: new Date() });
+    return res.json(note);
+  } catch (error) {
+    return res.status(400).json({ error });
+  }
+});
+
+app.use((err, req, res, next) => {
+  res.status(400).json({ error: err.message });
 });
 
 const PORT = process.env.PORT || 3001;
