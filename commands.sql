@@ -3,7 +3,7 @@ CREATE TABLE blogs (
     author text,
     url text NOT NULL,
     title text NOT NULL,
-    likes INTEGER DEFAULT 0
+    likes INTEGER DEFAULT 0 NOT NULL
 );
 
 INSERT INTO blogs (author, title, url) VALUES ('Martin Fowler', 'Patterns of Enterprise Application Architecture', 'https://martinfowler.com/eaaCatalog/');
