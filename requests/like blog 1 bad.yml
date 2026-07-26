@@ -1,0 +1,15 @@
+info:
+  name: like blog 1 bad
+  type: http
+  seq: 5
+
+http:
+  method: PUT
+  url: http://localhost:3001/api/blogs/0/like
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -6,6 +6,12 @@ info:
 http:
   method: POST
   url: http://localhost:3001/api/blogs
+  body:
+    type: json
+    data: |-
+      {
+        "author": null
+      }
   auth: inherit
 
 settings:
