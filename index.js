@@ -20,6 +20,9 @@ app.use("/api/blogs", blogRouter);
 app.use("/api/users", userRouter);
 
 app.use(errorHandler);
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({ error: err.message });
+});
 
 const start = async () => {
   await connectToDatabase();

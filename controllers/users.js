@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
   res.json(users);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   try {
     const { password, username, name } = req.body;
     const passwordHash = await bcrypt.hash(password, 10);
@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
     await user.save();
     return res.status(201).end();
   } catch (error) {
-    res.status(400).json({ error });
+    next(error);
   }
 });
 

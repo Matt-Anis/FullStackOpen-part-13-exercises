@@ -1,0 +1,15 @@
+info:
+  name: create unvalid user
+  type: http
+  seq: 8
+
+http:
+  method: POST
+  url: http://localhost:3001/api/users
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
