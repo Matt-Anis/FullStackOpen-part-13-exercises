@@ -1,0 +1,15 @@
+info:
+  name: reset db
+  type: http
+  seq: 13
+
+http:
+  method: POST
+  url: http://localhost:3001/api/reset
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

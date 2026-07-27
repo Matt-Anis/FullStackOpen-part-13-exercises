@@ -1,9 +1,12 @@
 {
   "scripts": {
     "dev": "node --watch index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "start:test": "TESTING=true node --watch index.js",
+    "test": "TESTING=true node --test --test-concurrency=1 tests/api_ch3.test.js"
   },
   "dependencies": {
+    "axios": "^1.18.1",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",

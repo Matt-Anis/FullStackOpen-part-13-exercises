@@ -3,7 +3,6 @@ const { SECRET } = require("../util/config");
 
 const tokenExtractor = (req, res, next) => {
   const authorization = req.get("authorization");
-  console.log("DEBUG: authorization header ", authorization);
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
     try {
       req.decodedToken = jwt.verify(authorization.substring(7), SECRET);

@@ -6,14 +6,14 @@ const User = require("../models/user");
 const { SECRET } = require("../util/config");
 
 router.post("/", async (req, res) => {
-  const { id, password } = req.body;
-  const user = await User.findByPk(id);
+  const { username, password } = req.body;
+  const user = await User.findOne({ where: { username } });
   if (!user) {
     return res.status(404).json({ error: "user not found" });
   }
   const isValidPassword = await bcrypt.compare(password, user.passwordHash);
   if (!isValidPassword) {
-    return response.status(401).json({
+    return res.status(401).json({
       error: "invalid username or password",
     });
   }

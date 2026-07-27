@@ -57,6 +57,13 @@ router.post("/", tokenExtractor, async (req, res, next) => {
   }
 });
 
+router.put("/:id", blogFinder, async (req, res, next) => {
+  const blog = req.blog;
+  Object.assign(blog, req.body);
+  await blog.save();
+  res.json(blog);
+});
+
 router.put("/:id/like", blogFinder, async (req, res, next) => {
   try {
     req.blog.likes += 1;

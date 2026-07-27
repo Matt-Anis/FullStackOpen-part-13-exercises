@@ -6,10 +6,10 @@ const tokenExtractor = require("../util/tokenExtractor");
 
 router.get("/", async (req, res) => {
   const users = await User.findAll({
+    attributes: { exclude: ["password_hash"] },
     include: {
       model: Blog,
     },
-    exclude: ["passwordHash"],
   });
   res.json(users);
 });
@@ -19,8 +19,8 @@ router.post("/", async (req, res, next) => {
     const { password, username, name } = req.body;
     const passwordHash = await bcrypt.hash(password, 10);
     const user = User.build({ passwordHash, name, username });
-    await user.save();
-    return res.status(201).end();
+    const result = await user.save();
+    return res.status(201).json(result);
   } catch (error) {
     next(error);
   }

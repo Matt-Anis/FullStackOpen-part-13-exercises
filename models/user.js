@@ -37,4 +37,10 @@ User.init(
   },
 );
 
+User.prototype.toJSON = function () {
+  const values = { ...this.get() };
+  delete values.passwordHash;
+  return values;
+};
+
 module.exports = User;
