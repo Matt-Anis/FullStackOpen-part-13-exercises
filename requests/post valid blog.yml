@@ -1,0 +1,26 @@
+info:
+  name: post valid blog
+  type: http
+  seq: 10
+
+http:
+  method: POST
+  url: http://localhost:3001/api/blogs
+  headers:
+    - name: Authorization
+      value: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuaXNAZ21haWwuY29tIiwiaWQiOjEsImlhdCI6MTc4NTExMDc0NX0.Km2SHPQkUBMHxyE-Ha8GjacblKmj6o-r0bjw3oQQaKM
+  body:
+    type: json
+    data: |-
+      {
+        "author": "anis",
+        "title": "anis",
+        "url": "example.com"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

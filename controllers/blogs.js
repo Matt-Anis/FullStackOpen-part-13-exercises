@@ -4,7 +4,14 @@ const { Blog, User } = require("../models");
 const tokenExtractor = require("../util/tokenExtractor");
 
 const blogFinder = async (req, res, next) => {
-  req.blog = await Blog.findByPk(req.params.id);
+  req.blog = await Blog.findByPk(req.params.id, {
+    include: {
+      model: User,
+      attributes: {
+        exclude: ["id", "passwordHash", "updatedAt", "createdAt", "userId"],
+      },
+    },
+  });
   if (!req.blog) {
     return res.status(404).end();
   }
@@ -16,7 +23,7 @@ router.get("/", async (req, res) => {
     include: {
       model: User,
       attributes: {
-        exclude: ["id", "passwordHash", "updatedAt", "createdAt"],
+        exclude: ["id", "passwordHash", "updatedAt", "createdAt", "userId"],
       },
     },
   });
