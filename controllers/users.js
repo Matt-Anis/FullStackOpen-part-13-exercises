@@ -8,9 +8,6 @@ router.get("/", async (req, res) => {
   const users = await User.findAll({
     include: {
       model: Blog,
-      attributes: {
-        exclude: ["userId"],
-      },
     },
     exclude: ["passwordHash"],
   });

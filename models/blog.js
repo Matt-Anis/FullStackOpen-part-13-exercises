@@ -21,6 +21,9 @@ Blog.init(
     url: {
       type: DataTypes.TEXT,
       allowNull: false,
+      validate: {
+        isUrl: true,
+      },
     },
     likes: {
       type: DataTypes.INTEGER,
