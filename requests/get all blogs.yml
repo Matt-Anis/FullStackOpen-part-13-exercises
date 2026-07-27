@@ -1,17 +1,11 @@
 info:
-  name: "post bad blog "
+  name: get all blogs
   type: http
-  seq: 4
+  seq: 1
 
 http:
-  method: POST
+  method: GET
   url: http://localhost:3001/api/blogs
-  body:
-    type: json
-    data: |-
-      {
-        "author": null
-      }
   auth: inherit
 
 settings:
