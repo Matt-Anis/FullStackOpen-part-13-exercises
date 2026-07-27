@@ -49,13 +49,18 @@ router.put("/:id/like", blogFinder, async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
-  const deletedCount = await Blog.destroy({
-    where: { id: req.params.id },
-  });
-  if (deletedCount === 1) {
-    res.status(204).end();
+router.delete("/:id", tokenExtractor, async (req, res) => {
+  const user = await User.findByPk(req.decodedToken.id);
+  const blog = await Blog.findByPk(req.params.id);
+  if (!blog) {
+    return res.status(404).json({ error: "blog not found" });
   }
+  if (blog.userId !== user.id) {
+    return res.status(403).end();
+  }
+
+  await blog.destroy();
+  res.status(204).end();
 });
 
 module.exports = router;
