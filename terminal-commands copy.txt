@@ -1,0 +1,1 @@
+docker exec -it postgres_db_exercise psql -U postgres postgres
