@@ -15,4 +15,19 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  try {
+    const { state } = req.body;
+    const readingListEntry = await ReadingList.findByPk(req.params.id);
+    if (!readingListEntry) {
+      return res.status(404).json({ error: "Reading list entry not found" });
+    }
+    readingListEntry.state = state;
+    await readingListEntry.save();
+    res.json(readingListEntry);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 module.exports = router;
