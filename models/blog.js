@@ -30,6 +30,20 @@ Blog.init(
       defaultValue: 0,
       allowNull: false,
     },
+    year: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        min: {
+          args: [1972],
+          msg: "year must be greater than 1971",
+        },
+        max: {
+          args: [new Date().getFullYear()],
+          msg: "year cannot be in the future",
+        },
+      },
+    },
   },
   {
     sequelize,
