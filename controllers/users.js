@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
+const { Op } = require("sequelize");
 
-const { User, Blog, ReadingList } = require("../models");
+const { User, Blog } = require("../models");
 const tokenExtractor = require("../util/tokenExtractor");
 
 router.get("/", async (req, res) => {
@@ -15,6 +16,11 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
+  const throughWhere = {};
+  if (req.query.read) {
+    throughWhere.state = req.query.read === "true" ? "read" : "unread";
+  }
+
   const user = await User.findByPk(req.params.id, {
     attributes: { exclude: ["password_hash"] },
     include: [
@@ -28,6 +34,7 @@ router.get("/:id", async (req, res) => {
         attributes: { exclude: ["userId"] },
         through: {
           attributes: ["id", "state"],
+          where: Object.keys(throughWhere).length ? throughWhere : undefined,
         },
       },
     ],
