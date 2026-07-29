@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
-    await queryInterface.createTable("reading_list", {
+    await queryInterface.createTable("reading_lists", {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -26,9 +26,9 @@ module.exports = {
     });
   },
   down: async ({ context: queryInterface }) => {
-    await queryInterface.dropTable("reading_list");
+    await queryInterface.dropTable("reading_lists");
     await queryInterface.sequelize.query(
-      'DROP TYPE IF EXISTS "enum_reading_list_state";',
+      'DROP TYPE IF EXISTS "enum_reading_lists_state";',
     );
   },
 };

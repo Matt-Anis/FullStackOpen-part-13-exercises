@@ -33,6 +33,7 @@ Blog.init(
     year: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: new Date().getFullYear(),
       validate: {
         min: {
           args: [1972],
