@@ -24,10 +24,10 @@ router.get("/:id", async (req, res) => {
       },
       {
         model: Blog,
-        as: "watchlist",
+        as: "readings",
         attributes: { exclude: ["userId"] },
         through: {
-          attributes: [],
+          attributes: ["id", "state"],
         },
       },
     ],
