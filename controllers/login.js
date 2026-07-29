@@ -2,30 +2,25 @@ const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const User = require("../models/user");
+const { User, Session } = require("../models");
 const { SECRET } = require("../util/config");
 
 router.post("/", async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ where: { username } });
-  if (!user) {
-    return res.status(404).json({ error: "user not found" });
-  }
-  const isValidPassword = await bcrypt.compare(password, user.passwordHash);
-  if (!isValidPassword) {
-    return res.status(401).json({
-      error: "invalid username or password",
-    });
-  }
 
-  const userForToken = {
-    username: user.username,
-    id: user.id,
-  };
+  const passwordCorrect =
+    user && (await bcrypt.compare(password, user.password_hash));
 
-  const token = jwt.sign(userForToken, SECRET);
+  if (!passwordCorrect)
+    return res.status(401).json({ error: "invalid credentials" });
+  if (user.disabled) return res.status(401).json({ error: "account disabled" });
 
-  res.status(200).send({ token, username: user.username, name: user.name });
+  const token = jwt.sign({ id: user.id }, process.env.SECRET);
+
+  await Session.create({ token, userId: user.id });
+
+  res.json({ token, username: user.username, name: user.name });
 });
 
 module.exports = router;
