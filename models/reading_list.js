@@ -22,6 +22,12 @@ ReadingList.init(
     underscored: true,
     modelName: "reading_list",
     timestamps: false,
+    indexes: [
+      {
+        unique: true,
+        fields: ["user_id", "blog_id"],
+      },
+    ],
   },
 );
 

@@ -46,6 +46,7 @@ router.get("/:id", blogFinder, (req, res) => {
 });
 
 router.post("/", tokenExtractor, async (req, res, next) => {
+  console.log("DEBUG: req.decodedToken:", req.decodedToken);
   try {
     const blog = await Blog.create({
       ...req.body,
@@ -53,6 +54,7 @@ router.post("/", tokenExtractor, async (req, res, next) => {
     });
     return res.json(blog);
   } catch (error) {
+    console.error("DEBUG: Error creating blog:", error);
     next(error);
   }
 });

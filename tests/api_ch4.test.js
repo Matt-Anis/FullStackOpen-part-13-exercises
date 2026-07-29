@@ -46,10 +46,12 @@ describe("Reading Lists API", () => {
       readingListEntry,
     );
 
+    console.log("DEBUG: Reading list entry response:", response.data);
+
     assert.ok([200, 201].includes(response.status));
-    assert.strictEqual(response.data.blog_id, createdBlogId);
-    assert.strictEqual(response.data.user_id, testData.users[0].id);
-    assert.strictEqual(response.data.read, false);
+    assert.strictEqual(response.data.blogId, createdBlogId);
+    assert.strictEqual(response.data.userId, testData.users[0].id);
+    assert.strictEqual(response.data.state, "unread");
   });
 
   it("cannot add same blog to reading list twice", async () => {
@@ -137,7 +139,7 @@ describe("Reading Lists API", () => {
     assert.ok(reading.author);
     assert.ok(reading.url);
     assert.ok(reading.reading_list);
-    assert.strictEqual(typeof reading.reading_list.read, "boolean");
+    assert.strictEqual(typeof reading.reading_list.state, "string");
   });
 
   it("user can filter reading list by read status", async () => {
@@ -164,12 +166,12 @@ describe("Reading Lists API", () => {
 
     const response = await axios.put(
       `${baseUrl}/readinglists/${readingListId}`,
-      { read: true },
+      { state: "read" },
       { headers: { Authorization: `Bearer ${testData.tokens[0]}` } },
     );
 
     assert.ok([200, 201].includes(response.status));
-    assert.strictEqual(response.data.read, true);
+    assert.strictEqual(response.data.state, "read");
   });
 
   it("marking as read requires authentication", async () => {
@@ -180,7 +182,7 @@ describe("Reading Lists API", () => {
 
     try {
       await axios.put(`${baseUrl}/readinglists/${readingListId}`, {
-        read: false,
+        state: "unread",
       });
       assert.fail("Should have thrown an error");
     } catch (error) {
@@ -197,7 +199,7 @@ describe("Reading Lists API", () => {
     try {
       await axios.put(
         `${baseUrl}/readinglists/${readingListId}`,
-        { read: false },
+        { state: "unread" },
         { headers: { Authorization: `Bearer ${testData.tokens[1]}` } },
       );
       assert.fail("Should have thrown an error");
@@ -210,7 +212,7 @@ describe("Reading Lists API", () => {
     try {
       await axios.put(
         `${baseUrl}/readinglists/99999`,
-        { read: true },
+        { state: "read" },
         { headers: { Authorization: `Bearer ${testData.tokens[0]}` } },
       );
       assert.fail("Should have thrown an error");
@@ -413,19 +415,19 @@ describe("Integration: Reading Lists and Sessions", () => {
     );
 
     assert.ok([200, 201].includes(response.status));
-    assert.strictEqual(response.data.blog_id, integrationBlogId);
+    assert.strictEqual(response.data.blogId, integrationBlogId);
     integrationReadingListId = response.data.id;
   });
 
   it("can mark blog as read with valid session", async () => {
     const response = await axios.put(
       `${baseUrl}/readinglists/${integrationReadingListId}`,
-      { read: true },
+      { state: "read" },
       { headers: { Authorization: `Bearer ${integrationToken}` } },
     );
 
     assert.ok([200, 201].includes(response.status));
-    assert.strictEqual(response.data.read, true);
+    assert.strictEqual(response.data.state, "read");
   });
 
   it("cannot mark blog as read after session expires (logout)", async () => {
@@ -436,7 +438,7 @@ describe("Integration: Reading Lists and Sessions", () => {
     try {
       await axios.put(
         `${baseUrl}/readinglists/${integrationReadingListId}`,
-        { read: false },
+        { state: "unread" },
         { headers: { Authorization: `Bearer ${integrationToken}` } },
       );
       assert.fail("Should have thrown an error");
@@ -451,11 +453,11 @@ describe("Integration: Reading Lists and Sessions", () => {
 
     const response = await axios.put(
       `${baseUrl}/readinglists/${integrationReadingListId}`,
-      { read: false },
+      { state: "unread" },
       { headers: { Authorization: `Bearer ${newToken}` } },
     );
 
     assert.ok([200, 201].includes(response.status));
-    assert.strictEqual(response.data.read, false);
+    assert.strictEqual(response.data.state, "unread");
   });
 });
